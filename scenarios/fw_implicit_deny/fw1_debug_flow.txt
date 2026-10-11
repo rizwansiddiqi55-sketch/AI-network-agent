@@ -1,0 +1,16 @@
+fw1 # diagnose debug flow filter dport 443
+fw1 # diagnose debug flow show function-name enable
+id=20085 trace_id=7 func=print_pkt_detail msg="vd-root:0 received a packet(proto=6, 10.1.20.15:51234->10.1.100.10:443) from port3. flag [S], seq 1, ack 0"
+id=20085 trace_id=7 func=vf_ip_route_input_common msg="find a route: flag=00000000 gw-10.1.100.10 via port4"
+id=20085 trace_id=7 func=fw_forward_handler msg="Denied by forward policy check (policy 0)"
+fw1 # show firewall policy
+config firewall policy
+    edit 5
+        set srcintf "port3"
+        set dstintf "port4"
+        set srcaddr "net-10-1-10-0"
+        set dstaddr "all"
+        set service "HTTPS"
+        set action accept
+    next
+end

@@ -1,0 +1,2 @@
+{"question": "OSPF between r1 and r2 will not come up after the new WAN link was added. Find the root cause.",
+ "expected": ["mtu", "exstart"]}

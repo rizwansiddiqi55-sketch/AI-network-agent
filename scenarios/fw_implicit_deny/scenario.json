@@ -1,0 +1,2 @@
+{"question": "Clients in 10.1.20.0/24 cannot open https to 10.1.100.10 through fw1 (FortiGate). Routing looks fine. Find the root cause.",
+ "expected": ["policy", "implicit deny", "10.1.100.10"]}

@@ -1,0 +1,7 @@
+r1# show ip ospf neighbor
+Neighbor ID  Pri  State           Dead Time  Address     Interface
+10.0.0.2       1  EXSTART/DR      00:00:33   192.0.2.2   GigabitEthernet0/1
+r1# show interfaces GigabitEthernet0/1 | include MTU
+  MTU 9000 bytes, BW 1000000 Kbit/sec
+r1# show logging | include OSPF
+%OSPF-5-ADJCHG: Process 1, Nbr 10.0.0.2 on GigabitEthernet0/1 from EXCHANGE to DOWN, Neighbor Down: Too many retransmissions

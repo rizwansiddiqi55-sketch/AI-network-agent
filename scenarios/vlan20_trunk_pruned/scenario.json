@@ -1,0 +1,2 @@
+{"question": "Users in VLAN 20 (10.1.20.0/24) cannot reach app server 10.1.100.10. Started after yesterday's trunk cleanup on sw-access1. Other VLANs are fine. Find the root cause.",
+ "expected": ["vlan 20", "trunk", "allowed"]}

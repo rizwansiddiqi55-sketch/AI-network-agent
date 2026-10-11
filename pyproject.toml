@@ -11,6 +11,7 @@ dev = ["pytest>=8"]
 
 [project.scripts]
 netagent = "netagent.cli:main"
+netagent-eval = "netagent.evals:main"
 
 [build-system]
 requires = ["setuptools>=68"]
