@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Network Agent</title>
+<style>
+:root{--bg:#fff;--fg:#1a1a1a;--mut:#666;--bd:#d0d0d0;--ac:#0b5fff}
+@media(prefers-color-scheme:dark){:root{--bg:#121212;--fg:#eaeaea;--mut:#9a9a9a;--bd:#333;--ac:#6ea1ff}}
+body{background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,sans-serif;max-width:860px;margin:0 auto;padding:16px}
+textarea,input,button{font:inherit;color:inherit;background:transparent;border:1px solid var(--bd);border-radius:6px;padding:8px;width:100%;box-sizing:border-box}
+textarea{min-height:120px;font-family:ui-monospace,monospace;font-size:14px}
+button{background:var(--ac);color:#fff;border:0;cursor:pointer;margin-top:12px}button:disabled{opacity:.5}
+label{display:block;margin-top:14px;font-weight:600}.note{color:var(--mut);font-size:14px}
+#out{white-space:pre-wrap;border:1px solid var(--bd);border-radius:6px;padding:12px;margin-top:16px;display:none}
+</style></head><body>
+<h1>Network &amp; Security Agent</h1>
+<p class="note">Analyzes pasted configs, <code>show</code> output and logs. Read-only: it never touches devices or applies changes. Secrets are redacted on a best-effort basis; strip credentials and customer data before pasting.</p>
+<label for="tok">Access token</label><input id="tok" type="password" autocomplete="off">
+<label for="q">Incident or design request</label><textarea id="q" placeholder="Users in VLAN 20 cannot reach 10.1.100.10 since yesterday's trunk cleanup"></textarea>
+<label for="ev">Evidence (configs, show output, logs)</label><textarea id="ev" style="min-height:220px"></textarea>
+<button id="go">Analyze</button><div id="out" role="status" aria-live="polite"></div>
+<script>
+const $=id=>document.getElementById(id),out=$("out");
+$("go").onclick=async()=>{
+  const b=$("go");b.disabled=true;out.style.display="block";out.textContent="Analyzing… this can take up to a minute.";
+  try{
+    const r=await fetch("/api",{method:"POST",headers:{"Content-Type":"application/json","X-Access-Token":$("tok").value},
+      body:JSON.stringify({question:$("q").value,evidence:$("ev").value})});
+    const j=await r.json();
+    if(!r.ok){out.textContent="Error: "+(j.error||r.status);return}
+    let t=j.answer;
+    if(j.proposals&&j.proposals.length)t+="\n\n--- PROPOSED CHANGES (not applied) ---\n"+JSON.stringify(j.proposals,null,2);
+    out.textContent=t;
+  }catch(e){out.textContent="Request failed."}finally{b.disabled=false}
+};
+</script></body></html>
